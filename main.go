@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	robotgo "github.com/go-vgo/robotgo"
 	hook "github.com/robotn/gohook"
 )
 
@@ -80,6 +81,7 @@ func stopRecording() {
 
 // playRecording plays back the recorded actions with the recorded delays.
 func playRecording() {
+	recording = false
 	fmt.Println("Playing back recorded actions...")
 
 	for _, action := range actions {
@@ -89,9 +91,22 @@ func playRecording() {
 		// Simulate the delay for playback
 		time.Sleep(time.Duration(delay) * time.Millisecond)
 
-		// Display the action (this simulates pressing the key)
-		fmt.Printf("Key: %d\n", keycode)
+		// Simulate the key press using robotgo
+		robotgo.KeyTap(getKeyString(keycode)) // Convert keycode to string
+
+		// Display the action (simulating pressing the key)
+		fmt.Printf("Simulated Key Press: %d\n", keycode)
 	}
 
 	fmt.Println("Playback finished.")
+}
+
+// getKeyString converts a keycode to its corresponding string representation.
+func getKeyString(keycode int) string {
+	for k, v := range hook.Keycode {
+		if int(v) == keycode {
+			return k
+		}
+	}
+	return ""
 }
